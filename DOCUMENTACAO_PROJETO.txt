@@ -1,0 +1,160 @@
+==========================================================================
+            DOCUMENTAÇÃO TÉCNICA - PROJETO AAS TYPE 2
+             Asset Administration Shell (AAS) com IoT
+==========================================================================
+
+VISÃO GERAL TÉCNICA
+===================
+
+Este projeto demonstra a implementação de um Digital Twin, utilizando o padrão
+Asset Administration Shell (AAS) v3.0, para um ativo industrial (ar condicionado).
+O sistema integra dados de sensores IoT em tempo real, consumidos via MQTT e
+expostos através de um servidor OPC UA e uma API HTTP/REST, seguindo os
+princípios da Indústria 4.0.
+
+COMPONENTES PRINCIPAIS
+======================
+
+1. SIMULADOR IoT (Python 3.9)
+   - Imagem Docker: `python:3.9-slim`
+   - Localização: `/iot-sensor-simulator/app/sensor_simulator.py`
+   - Biblioteca MQTT: `paho-mqtt`
+   - Função: Publica mensagens JSON em tópicos MQTT distintos para cada sensor.
+   - Payload JSON: `{"value": <dado>, "unit": "...", "timestamp": "..."}`
+   - Tópicos: `sensors/temperature`, `sensors/humidity`, `sensors/noiselevel`, `sensors/status`
+   - Frequência: 1 Hz (configurável via variável de ambiente `SENSOR_INTERVAL`)
+
+2. FA³ST-SERVICE (Java)
+   - Imagem Docker: `fraunhoferiosb/faaast-service:1.2.0`
+   - Função: Core do sistema. Atua como um middleware que consome dados
+     de um Message Broker (MQTT) e os mapeia para um modelo de dados AAS.
+     Expõe o AAS através de múltiplos endpoints.
+   - Endpoints:
+     * HTTP/REST API (porta 8080): Para acesso e manipulação do AAS.
+     * OPC UA Server (porta 4840): Para integração com sistemas SCADA/HMI.
+   - Configuração Principal: `/FAAAST-Service/misc/examples/config.json`
+
+3. MODELO AAS (JSON)
+   - Localização: `/FAAAST-Service/misc/examples/model.json`
+   - Padrão: AAS v3.0, serializado em JSON.
+   - Submodelos Chave:
+     * DigitalNamePlate (ID: `https://carrier.com.br/ids/sm/DigitalNameplate/3/0`)
+     * TechnicalData (ID: `https://carrier.com.br/ids/sm/TechnicalData/1/1`)
+
+4. MQTT BROKER (Eclipse Mosquitto)
+   - Imagem Docker: `eclipse-mosquitto:2.0`
+   - Porta: 1883
+   - Network: `iot-network` (Docker Bridge Network)
+
+ARQUITETURA E FLUXO DE DADOS
+=============================
+
+1. PUBLICAÇÃO (IoT Simulator):
+   - O script Python `sensor_simulator.py` gera dados aleatórios.
+   - Utiliza a biblioteca `paho-mqtt` para se conectar ao broker Mosquitto.
+   - Serializa os dados em formato JSON.
+   - Publica a mensagem no tópico MQTT correspondente (ex: `sensors/temperature`).
+
+2. MAPEAMENTO (FA³ST-Service):
+   - O `MqttAssetConnection` do FA³ST se inscreve nos tópicos definidos em `config.json`.
+   - Ao receber uma mensagem, o `subscriptionProvider` correspondente é acionado.
+   - A `query` JSONPath (`$.value`) é aplicada ao payload JSON para extrair o valor.
+   - O valor extraído é mapeado para a `Property` do AAS definida na chave de referência.
+   - O modelo de dados AAS em memória é atualizado com o novo valor.
+
+3. EXPOSIÇÃO (Endpoints):
+   - O servidor OPC UA (porta 4840) reflete a mudança em tempo real no nó correspondente.
+   - A API HTTP (porta 8080) retorna o valor atualizado em novas requisições.
+
+ESTRUTURA AAS IMPLEMENTADA (DETALHADA)
+=======================================
+
+AssetAdministrationShell: "ArCondicionadoAAS" (ID: `https://carrier.com.br/ids/aas/3044_4111_9052_1678`)
+├── Asset: Ar Condicionado Carrier (GlobalAssetID: `https://carrier.com.br/ids/asset/6205_5111_9052_8720`)
+├── Submodel: DigitalNamePlate (ID: `https://carrier.com.br/ids/sm/DigitalNameplate/3/0`)
+│   └── ... (propriedades estáticas de identificação)
+└── Submodel: TechnicalData (ID: `https://carrier.com.br/ids/sm/TechnicalData/1/1`)
+    └── Sensores (SubmodelElementCollection, idShort: "Sensores")
+        ├── Temperature (Property, idShort: "Temperature", semanticId: `0173-1#02-BAA120#008`)
+        ├── Humidity (Property, idShort: "Humidity", semanticId: `0173-1#02-BAE342#004---1ED74F85`)
+        ├── NoiseLevel (Property, idShort: "NoiseLevel", semanticId: `0173-1#02-BAA036#005---74F53B6F`)
+        └── Status (Property, idShort: "Status", semanticId: `0173-1#02-AAD596#001---89B472FF`)
+
+CONFIGURAÇÃO MQTT (DETALHADA)
+===============================
+
+A seção `subscriptionProviders` em `config.json` é um mapa onde a chave é uma *string de referência* que identifica unicamente um elemento no AAS.
+
+Sintaxe da String de Referência:
+`(TipoElemento1)valor1, (TipoElemento2)valor2, ...`
+
+Exemplo para a propriedade "Temperature":
+`(Submodel)https://carrier.com.br/ids/sm/TechnicalData/1/1, (SubmodelElementCollection)Sensores, (Property)Temperature`
+
+- `(Submodel)https://...`: Aponta para o Submodelo pelo seu ID global.
+- `(SubmodelElementCollection)Sensores`: Navega para a coleção com `idShort` "Sensores".
+- `(Property)Temperature`: Seleciona a propriedade com `idShort` "Temperature".
+
+EXECUÇÃO E VALIDAÇÃO TÉCNICA
+=============================
+
+1. Iniciar Ambiente Docker:
+   ```bash
+   # Navegue para o diretório do simulador
+   cd /home/manuel/AASTYPE2-main/iot-sensor-simulator/docker
+   # Inicia o broker e o simulador
+   docker compose up -d --build
+   ```
+
+2. Iniciar FA³ST-Service:
+   ```bash
+   # Navegue para o diretório do serviço
+   cd /home/manuel/AASTYPE2-main/FAAAST-Service
+   # Execute o container FA³ST
+   docker run -d --name carrier-faaast-realtime \
+     --network iot-network \
+     -p 8080:8080 -p 4840:4840 \
+     -v $(pwd)/misc/examples/model.json:/app/resources/model.json \
+     -v $(pwd)/misc/examples/config.json:/app/resources/config.json \
+     fraunhoferiosb/faaast-service:1.2.0 \
+     -c /app/resources/config.json
+   ```
+
+3. Validação Técnica:
+   - **Verificar Logs do Simulador:**
+     ```bash
+     docker logs iot-sensor-simulator -f
+     # Saída esperada: 📊 Temperature: 25.1°C | Humidity: 60.5% | ...
+     ```
+   - **Verificar Conexão MQTT no FA³ST:**
+     ```bash
+     docker logs carrier-faaast-realtime | grep "Asset connection established"
+     # Saída esperada: Asset connection established (endpoint: tcp://mqtt-broker:1883)
+     ```
+   - **Inspecionar Tráfego MQTT (requer `mosquitto-clients`):**
+     ```bash
+     docker run -it --network iot-network eclipse-mosquitto mosquitto_sub -h mqtt-broker -t "sensors/#" -v
+     # Saída esperada: sensors/temperature {"value": 25.1, ...}
+     ```
+   - **Consultar Valor via HTTP API:**
+     ```bash
+     # ID do Submodelo TechnicalData em Base64URL
+     SUBMODEL_ID="aHR0cHM6Ly9jYXJyaWVyLmNvbS5ici9pZHMvc20vVGVjaG5pY2FsRGF0YS8xLzE"
+     curl -s "http://localhost:8080/api/v3.0/submodels/${SUBMODEL_ID}/submodel-elements/Sensores.Temperature/value"
+     # Saída esperada: (apenas o valor, ex: 25.1)
+     ```
+
+DETALHES TÉCNICOS ADICIONAIS
+============================
+
+- **Tipos de Dados**: As propriedades no AAS (`Temperature`, `Humidity`, `NoiseLevel`) são definidas com `valueType` "xs:double". A propriedade `Status` é "xs:string". O FA³ST-Service realiza a conversão automática do valor JSON para o tipo de dado especificado.
+- **Serialização**: O modelo AAS é fornecido ao FA³ST no formato JSON. A API HTTP também retorna dados serializados em JSON por padrão, mas pode suportar outros formatos como XML via `Content-Type` headers.
+- **Segurança**: A configuração atual não implementa segurança. Em um ambiente de produção, seria crucial configurar:
+  - Autenticação no MQTT Broker (usuário/senha, certificados).
+  - TLS para a comunicação MQTT e OPC UA.
+  - Autenticação/Autorização na API HTTP (ex: OAuth2/JWT).
+
+==========================================================================
+Esta documentação fornece uma base técnica para o entendimento, operação e
+extensão do projeto, alinhado com os padrões da Indústria 4.0.
+==========================================================================
