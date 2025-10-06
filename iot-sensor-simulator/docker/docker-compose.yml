@@ -33,8 +33,7 @@ services:
 
 networks:
   iot-network:
-    name: iot-network
-    external: true
+    driver: bridge
 
 volumes:
   mosquitto-data:
