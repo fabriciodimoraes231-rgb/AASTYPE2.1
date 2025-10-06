@@ -2,7 +2,7 @@
 
 Este projeto implementa um sistema completo de Asset Administration Shell (AAS) com integração IoT para monitoramento de sensores de ar condicionado industrial.
 
-## 🎯 Objetivo
+##Objetivo
 
 Desenvolver uma solução de digital twin baseada no padrão AAS v3.0 para:
 - Monitoramento em tempo real de sensores IoT
@@ -10,7 +10,7 @@ Desenvolver uma solução de digital twin baseada no padrão AAS v3.0 para:
 - Modelagem padronizada usando ECLASS/IEC61360
 - Visualização e gestão através do Package Explorer
 
-## 🏗️ Arquitetura
+##Arquitetura
 
 ```
 ┌─────────────────┐    ┌──────────────┐    ┌─────────────────┐
@@ -26,7 +26,7 @@ Desenvolver uma solução de digital twin baseada no padrão AAS v3.0 para:
                                         └─────────────────┘
 ```
 
-## 📁 Estrutura do Projeto
+##Estrutura do Projeto
 
 ```
 AASTYPE2/
@@ -43,7 +43,7 @@ AASTYPE2/
 └── README.md
 ```
 
-## 🚀 Como Executar
+##Como Executar
 
 ### Pré-requisitos
 - Docker & Docker Compose
@@ -69,7 +69,7 @@ cd iot-sensor-simulator/src
 python3 sensor_simulator.py
 ```
 
-## 📊 Sensores Monitorados
+##Sensores Monitorados
 
 | Sensor | Semantic ID | Unidade | Descrição |
 |--------|-------------|---------|-----------|
@@ -78,7 +78,7 @@ python3 sensor_simulator.py
 | **NoiseLevel** | `0173-1#02-BAA036#005` | dB | Nível de ruído |
 | **Status** | `0173-1#02-BAA045#006` | - | Status operacional |
 
-## 🔗 Integrações
+##Integrações
 
 ### MQTT Topics
 - `sensors/temperature` - Dados de temperatura
@@ -91,7 +91,7 @@ python3 sensor_simulator.py
 - `http://localhost:8080/shells` - Asset Administration Shells
 - `http://localhost:8080/submodels` - Submodels
 
-## 🛠️ Tecnologias
+## Tecnologias
 
 - **AAS v3.0** - Asset Administration Shell
 - **FAAAST Service** - Implementação AAS em Java
@@ -100,7 +100,7 @@ python3 sensor_simulator.py
 - **ECLASS** - Semantic IDs padronizados
 - **IEC61360** - Concept Descriptions
 
-## 📋 Submodels
+##Submodels
 
 ### 1. DigitalNamePlate
 Informações de identificação do equipamento Carrier:
@@ -108,13 +108,13 @@ Informações de identificação do equipamento Carrier:
 - Endereço físico, versões de software/firmware
 - Conformidade com IDTA-02006-3-0
 
-### 2. IoTSensors  
+### 2. Technical data
 Dados em tempo real dos sensores:
 - Temperatura, umidade, ruído, status
 - Semantic IDs ECLASS padronizados
 - Concept Descriptions IEC61360
 
-## 🔧 Configuração
+##Configuração
 
 ### MQTT Broker (Mosquitto)
 ```
@@ -130,7 +130,7 @@ MQTT Integration: enabled
 Model File: IoTSensors_Template.json
 ```
 
-## 📈 Próximos Passos
+## Próximos Passos
 
 - [ ] Interface web para visualização
 - [ ] Alertas e notificações
@@ -138,7 +138,7 @@ Model File: IoTSensors_Template.json
 - [ ] Dashboard em tempo real
 - [ ] Análise preditiva
 
-## 🤝 Contribuição
+##Contribuição
 
 1. Fork o projeto
 2. Crie uma branch feature (`git checkout -b feature/AmazingFeature`)
@@ -146,15 +146,7 @@ Model File: IoTSensors_Template.json
 4. Push para a branch (`git push origin feature/AmazingFeature`)
 5. Abra um Pull Request
 
-## 📝 Licença
 
-Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
-
-## 📞 Contato
-
-**Projeto**: AASTYPE2 - Asset Administration Shell IoT  
-**Tecnologia**: AAS v3.0, MQTT, FAAAST Service  
-**Padrões**: ECLASS, IEC61360, IDTA
 
 ---
 *Desenvolvido para integração de sensores IoT com Asset Administration Shell seguindo os padrões industriais internacionais.*
