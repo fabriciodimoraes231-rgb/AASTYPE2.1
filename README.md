@@ -172,6 +172,10 @@ O projeto agora inclui armazenamento e análise de dados históricos:
 ### Documentação
 - 📖 [Guia de Implementação Time Series](TIME_SERIES_IMPLEMENTATION.md)
 - 📖 [Guia de Consultas MongoDB](MONGODB_QUERY_GUIDE.md)
+- 📖 [Quick Start Guide](QUICK_START.md)
+- 📖 [Testing Guide](TESTING_GUIDE.md)
+- 📖 [Resumo da Implementação](IMPLEMENTATION_SUMMARY.md)
+- 📖 **[Índice Completo de Documentação](DOCUMENTATION_INDEX.md)** ⭐
 
 ##Contribuição
 
