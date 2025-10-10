@@ -34,7 +34,6 @@ services:
 networks:
   iot-network:
     name: iot-network
-    external: true
 
 volumes:
   mosquitto-data:
