@@ -1,0 +1,55 @@
+{
+  "core": {
+    "requestHandlerThreadPoolSize": 2
+  },
+  "persistence": {
+    "@class": "de.fraunhofer.iosb.ilt.faaast.service.persistence.memory.PersistenceInMemory",
+    "initialModelFile": "/model/IoTSensors_Template.json"
+  },
+  "messageBus": {
+    "@class": "de.fraunhofer.iosb.ilt.faaast.service.messagebus.mqtt.MessageBusMqtt",
+    "useInternalServer": false,
+    "host": "mqtt-broker",
+    "port": 1883,
+    "topicPrefix": "aas/events/"
+  },
+  "endpoints": [
+    {
+      "@class": "de.fraunhofer.iosb.ilt.faaast.service.endpoint.http.HttpEndpoint",
+      "port": 8080
+    },
+    {
+      "@class": "de.fraunhofer.iosb.ilt.faaast.service.endpoint.opcua.OpcUaEndpoint",
+      "tcpPort": 4840
+    }
+  ],
+  "assetConnections": [
+    {
+      "@class": "de.fraunhofer.iosb.ilt.faaast.service.assetconnection.mqtt.MqttAssetConnection",
+      "serverUri": "tcp://mqtt-broker:1883",
+      "clientId": "FAAAST_IoT_Sensors_Client",
+      "subscriptionProviders": {
+        "(Submodel)https://carrier.com.br/ids/sm/IoTSensors/1/0, (Property)Temperature": {
+          "topic": "sensors/temperature",
+          "format": "JSON",
+          "query": "$.value"
+        },
+        "(Submodel)https://carrier.com.br/ids/sm/IoTSensors/1/0, (Property)Humidity": {
+          "topic": "sensors/humidity",
+          "format": "JSON",
+          "query": "$.value"
+        },
+        "(Submodel)https://carrier.com.br/ids/sm/IoTSensors/1/0, (Property)NoiseLevel": {
+          "topic": "sensors/noiselevel",
+          "format": "JSON",
+          "query": "$.value"
+        },
+        "(Submodel)https://carrier.com.br/ids/sm/IoTSensors/1/0, (Property)Status": {
+          "topic": "sensors/status",
+          "format": "JSON",
+          "query": "$.value"
+        }
+      }
+    }
+  ]
+}

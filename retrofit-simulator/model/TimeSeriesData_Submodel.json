@@ -1,0 +1,295 @@
+{
+  "assetAdministrationShells": [],
+  "submodels": [
+    {
+      "idShort": "TimeSeriesData",
+      "description": [
+        {
+          "language": "pt",
+          "text": "Submodelo para armazenamento de dados de séries temporais dos sensores IoT"
+        },
+        {
+          "language": "en",
+          "text": "Submodel for storing IoT sensor time series data"
+        }
+      ],
+      "administration": {
+        "version": "1",
+        "revision": "0"
+      },
+      "id": "https://carrier.com.br/ids/sm/TimeSeriesData/1/0",
+      "kind": "Instance",
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "https://admin-shell.io/idta/TimeSeries/1/0"
+          }
+        ]
+      },
+      "modelType": "Submodel",
+      "submodelElements": [
+        {
+          "idShort": "TemperatureTimeSeries",
+          "description": [
+            {
+              "language": "pt",
+              "text": "Série temporal de dados de temperatura"
+            },
+            {
+              "language": "en",
+              "text": "Temperature time series data"
+            }
+          ],
+          "modelType": "SubmodelElementCollection",
+          "value": [
+            {
+              "idShort": "Name",
+              "valueType": "xs:string",
+              "value": "Temperature Sensor Readings",
+              "modelType": "Property"
+            },
+            {
+              "idShort": "Description",
+              "valueType": "xs:string",
+              "value": "Historical temperature readings from IoT sensor",
+              "modelType": "Property"
+            },
+            {
+              "idShort": "RecordCount",
+              "description": [
+                {
+                  "language": "pt",
+                  "text": "Número total de registros na série temporal"
+                }
+              ],
+              "valueType": "xs:int",
+              "value": "0",
+              "modelType": "Property"
+            },
+            {
+              "idShort": "SamplingRate",
+              "description": [
+                {
+                  "language": "pt",
+                  "text": "Taxa de amostragem em Hz"
+                }
+              ],
+              "valueType": "xs:double",
+              "value": "1.0",
+              "modelType": "Property"
+            },
+            {
+              "idShort": "Unit",
+              "valueType": "xs:string",
+              "value": "°C",
+              "modelType": "Property"
+            },
+            {
+              "idShort": "DataType",
+              "valueType": "xs:string",
+              "value": "xs:double",
+              "modelType": "Property"
+            },
+            {
+              "idShort": "StartTime",
+              "description": [
+                {
+                  "language": "pt",
+                  "text": "Timestamp do primeiro registro"
+                }
+              ],
+              "valueType": "xs:dateTime",
+              "modelType": "Property"
+            },
+            {
+              "idShort": "EndTime",
+              "description": [
+                {
+                  "language": "pt",
+                  "text": "Timestamp do último registro"
+                }
+              ],
+              "valueType": "xs:dateTime",
+              "modelType": "Property"
+            }
+          ]
+        },
+        {
+          "idShort": "HumidityTimeSeries",
+          "description": [
+            {
+              "language": "pt",
+              "text": "Série temporal de dados de umidade"
+            },
+            {
+              "language": "en",
+              "text": "Humidity time series data"
+            }
+          ],
+          "modelType": "SubmodelElementCollection",
+          "value": [
+            {
+              "idShort": "Name",
+              "valueType": "xs:string",
+              "value": "Humidity Sensor Readings",
+              "modelType": "Property"
+            },
+            {
+              "idShort": "Description",
+              "valueType": "xs:string",
+              "value": "Historical humidity readings from IoT sensor",
+              "modelType": "Property"
+            },
+            {
+              "idShort": "RecordCount",
+              "valueType": "xs:int",
+              "value": "0",
+              "modelType": "Property"
+            },
+            {
+              "idShort": "SamplingRate",
+              "valueType": "xs:double",
+              "value": "1.0",
+              "modelType": "Property"
+            },
+            {
+              "idShort": "Unit",
+              "valueType": "xs:string",
+              "value": "%",
+              "modelType": "Property"
+            },
+            {
+              "idShort": "DataType",
+              "valueType": "xs:string",
+              "value": "xs:double",
+              "modelType": "Property"
+            },
+            {
+              "idShort": "StartTime",
+              "valueType": "xs:dateTime",
+              "modelType": "Property"
+            },
+            {
+              "idShort": "EndTime",
+              "valueType": "xs:dateTime",
+              "modelType": "Property"
+            }
+          ]
+        },
+        {
+          "idShort": "NoiseLevelTimeSeries",
+          "description": [
+            {
+              "language": "pt",
+              "text": "Série temporal de dados de nível de ruído"
+            },
+            {
+              "language": "en",
+              "text": "Noise level time series data"
+            }
+          ],
+          "modelType": "SubmodelElementCollection",
+          "value": [
+            {
+              "idShort": "Name",
+              "valueType": "xs:string",
+              "value": "Noise Level Sensor Readings",
+              "modelType": "Property"
+            },
+            {
+              "idShort": "Description",
+              "valueType": "xs:string",
+              "value": "Historical noise level readings from IoT sensor",
+              "modelType": "Property"
+            },
+            {
+              "idShort": "RecordCount",
+              "valueType": "xs:int",
+              "value": "0",
+              "modelType": "Property"
+            },
+            {
+              "idShort": "SamplingRate",
+              "valueType": "xs:double",
+              "value": "1.0",
+              "modelType": "Property"
+            },
+            {
+              "idShort": "Unit",
+              "valueType": "xs:string",
+              "value": "dB",
+              "modelType": "Property"
+            },
+            {
+              "idShort": "DataType",
+              "valueType": "xs:string",
+              "value": "xs:double",
+              "modelType": "Property"
+            },
+            {
+              "idShort": "StartTime",
+              "valueType": "xs:dateTime",
+              "modelType": "Property"
+            },
+            {
+              "idShort": "EndTime",
+              "valueType": "xs:dateTime",
+              "modelType": "Property"
+            }
+          ]
+        },
+        {
+          "idShort": "StorageConfiguration",
+          "description": [
+            {
+              "language": "pt",
+              "text": "Configurações de armazenamento de dados históricos"
+            }
+          ],
+          "modelType": "SubmodelElementCollection",
+          "value": [
+            {
+              "idShort": "RetentionPeriod",
+              "description": [
+                {
+                  "language": "pt",
+                  "text": "Período de retenção em dias"
+                }
+              ],
+              "valueType": "xs:int",
+              "value": "90",
+              "modelType": "Property"
+            },
+            {
+              "idShort": "AggregationInterval",
+              "description": [
+                {
+                  "language": "pt",
+                  "text": "Intervalo de agregação em minutos"
+                }
+              ],
+              "valueType": "xs:int",
+              "value": "60",
+              "modelType": "Property"
+            },
+            {
+              "idShort": "StorageBackend",
+              "valueType": "xs:string",
+              "value": "MongoDB",
+              "modelType": "Property"
+            },
+            {
+              "idShort": "DatabaseName",
+              "valueType": "xs:string",
+              "value": "aas_timeseries",
+              "modelType": "Property"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "conceptDescriptions": []
+}

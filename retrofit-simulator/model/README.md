@@ -23,10 +23,26 @@ Contém a definição completa do submodelo de sensores IoT, incluindo:
 ### 📄 `IoTSensors_ConceptDescriptions.json`
 Contém as descrições conceituais (ConceptDescriptions) para cada propriedade do submodelo, seguindo o padrão IEC 61360.
 
+### 📄 `TimeSeriesData_Submodel.json`
+**NOVO!** Submodelo para armazenamento de dados históricos (Time Series):
+- Segue o padrão IDTA-02008 (Time Series Data)
+- Metadados para cada série temporal (temperatura, umidade, ruído)
+- Configurações de armazenamento e retenção
+- Informações sobre agregação de dados
+
 ### 📄 `ArCondicionadoAAS.json`
 Modelo completo do Asset Administration Shell do Ar Condicionado incluindo:
 - Digital Nameplate (placa de identificação)
 - IoT Sensors (dados dos sensores)
+
+### 📄 `config.json`
+Configuração do FA³ST Service com MQTT subscriptions para outros sistemas.
+
+### 📄 `config-with-mongodb.json`
+**NOVO!** Configuração do FA³ST Service otimizada para:
+- Conexão com MongoDB para persistência
+- MQTT subscriptions para sensores IoT
+- Endpoints HTTP e OPC UA
 
 ## Como Usar
 

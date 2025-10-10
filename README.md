@@ -18,12 +18,25 @@ Desenvolver uma solução de digital twin baseada no padrão AAS v3.0 para:
 │  (Temperature,  │    │ (Mosquitto)  │    │    (AAS API)    │
 │   Humidity,     │    │              │    │                 │
 │   Noise, Status)│    └──────────────┘    └─────────────────┘
-└─────────────────┘                               │
-                                                  │
-                                        ┌─────────────────┐
-                                        │ Package Explorer│
-                                        │  (Visual Editor)│
-                                        └─────────────────┘
+└─────────────────┘            │                     │
+                               │                     │
+                               ↓                     ↓
+                      ┌─────────────────┐   ┌───────────────┐
+                      │  Time Series    │   │  OPC UA       │
+                      │  Recorder       │   │  Server       │
+                      └─────────────────┘   └───────────────┘
+                               │
+                               ↓
+                      ┌─────────────────┐
+                      │    MongoDB      │
+                      │  (Historical)   │
+                      └─────────────────┘
+                               │
+                               ↓
+                      ┌─────────────────┐
+                      │  Mongo Express  │
+                      │   (Web UI)      │
+                      └─────────────────┘
 ```
 
 ##Estrutura do Projeto
@@ -132,11 +145,33 @@ Model File: IoTSensors_Template.json
 
 ## Próximos Passos
 
-- [ ] Interface web para visualização
+- [x] Time Series Data - Armazenamento histórico em MongoDB
+- [x] Consulta e análise de dados históricos
+- [x] Interface web (Mongo Express) para visualização
+- [ ] Dashboard em tempo real (Grafana)
 - [ ] Alertas e notificações
 - [ ] Integração com sistemas ERP
-- [ ] Dashboard em tempo real
 - [ ] Análise preditiva
+
+## 📊 Time Series Data (Novo!)
+
+O projeto agora inclui armazenamento e análise de dados históricos:
+
+### Recursos Implementados
+- ✅ MongoDB para armazenamento de time series
+- ✅ Gravação automática de dados históricos
+- ✅ Interface web (Mongo Express) para consultas
+- ✅ Submodelo IDTA Time Series Data
+- ✅ Queries otimizadas e agregações
+
+### Acesso aos Dados Históricos
+- **MongoDB**: `localhost:27017` (admin/admin123)
+- **Mongo Express**: http://localhost:8081 (admin/admin123)
+- **Database**: `aas_timeseries`
+
+### Documentação
+- 📖 [Guia de Implementação Time Series](TIME_SERIES_IMPLEMENTATION.md)
+- 📖 [Guia de Consultas MongoDB](MONGODB_QUERY_GUIDE.md)
 
 ##Contribuição
 
