@@ -1,0 +1,71 @@
+{
+    "core": {
+        "requestHandlerThreadPoolSize": 2
+    },
+    "endpoints": [
+        {
+            "@class": "de.fraunhofer.iosb.ilt.faaast.service.endpoint.http.HttpEndpoint",
+            "port": 8080
+        },
+        {
+            "@class": "de.fraunhofer.iosb.ilt.faaast.service.endpoint.opcua.OpcUaEndpoint",
+            "tcpPort": 4840,
+            "secondsTillShutdown": 5,
+            "profiles": [
+                "AAS_REPOSITORY_FULL",
+                "AAS_FULL",
+                "SUBMODEL_REPOSITORY_FULL",
+                "SUBMODEL_FULL"
+            ]
+        }
+    ],
+    "persistence": {
+        "@class": "de.fraunhofer.iosb.ilt.faaast.service.persistence.mongo.PersistenceMongo",
+        "connectionString": "mongodb://mongo:27017",
+        "database": "faaast-database",
+        "override": true,
+        "initialModelFile": "/app/resources/model.json"
+    },
+    "fileStorage": {
+        "@class": "de.fraunhofer.iosb.ilt.faaast.service.filestorage.filesystem.FileStorageFilesystem",
+        "path": "/app/resources/storage"
+    },
+    "messageBus": {
+        "@class": "de.fraunhofer.iosb.ilt.faaast.service.messagebus.internal.MessageBusInternal"
+    },
+    "assetConnections": [
+        {
+            "@class": "de.fraunhofer.iosb.ilt.faaast.service.assetconnection.mqtt.MqttAssetConnection",
+            "serverUri": "tcp://mqtt-broker:1883",
+            "clientId": "FAAAST_ArCondicionado_AAS",
+            "subscriptionProviders": {
+                "(Submodel)https://admin-shell.io/idta/SubmodelTemplate/TimeSeries/1/1, (SubmodelElementCollection)Metadata, (SubmodelElementCollection)Record, (Property)Temperature": {
+                    "@class": "de.fraunhofer.iosb.ilt.faaast.service.assetconnection.mqtt.provider.MqttSubscriptionProvider",
+                    "format": "JSON",
+                    "topic": "sensors/temperature",
+                    "query": "$.value"
+                },
+                "(Submodel)https://admin-shell.io/idta/SubmodelTemplate/TimeSeries/1/1, (SubmodelElementCollection)Metadata, (SubmodelElementCollection)Record, (Property)Humidity": {
+                    "@class": "de.fraunhofer.iosb.ilt.faaast.service.assetconnection.mqtt.provider.MqttSubscriptionProvider",
+                    "format": "JSON",
+                    "topic": "sensors/humidity",
+                    "query": "$.value"
+                },
+                "(Submodel)https://admin-shell.io/idta/SubmodelTemplate/TimeSeries/1/1, (SubmodelElementCollection)Metadata, (SubmodelElementCollection)Record, (Property)NoiseLevel": {
+                    "@class": "de.fraunhofer.iosb.ilt.faaast.service.assetconnection.mqtt.provider.MqttSubscriptionProvider",
+                    "format": "JSON",
+                    "topic": "sensors/noiselevel",
+                    "query": "$.value"
+                },
+                "(Submodel)https://admin-shell.io/idta/SubmodelTemplate/TimeSeries/1/1, (SubmodelElementCollection)Metadata, (SubmodelElementCollection)Record, (Property)Status": {
+                    "@class": "de.fraunhofer.iosb.ilt.faaast.service.assetconnection.mqtt.provider.MqttSubscriptionProvider",
+                    "format": "JSON",
+                    "topic": "sensors/status",
+                    "query": "$.value"
+                }
+            },
+            "valueProviders": {},
+            "operationProviders": {}
+        }
+    ]
+}
