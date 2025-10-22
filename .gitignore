@@ -55,5 +55,7 @@ logs
 # FAAAST specific
 *.aasx
 
-# Submodules (will be added separately)
-FAAAST-Service/
+# FAAAST-Service - ignorar apenas target/ e builds
+FAAAST-Service/**/target/
+FAAAST-Service/**/*.jar
+FAAAST-Service/**/build/

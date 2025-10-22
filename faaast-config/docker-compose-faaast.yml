@@ -1,0 +1,41 @@
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: mongo
+    ports:
+      - "27019:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - iot-network
+    restart: unless-stopped
+
+  FA3ST:
+    image: fraunhoferiosb/faaast-service
+    container_name: faaast-service
+    volumes:
+      - ../examples/:/app/resources/
+      - ../storage/:/app/storage/
+    environment:
+      - faaast_model=/app/resources/model.json
+      - faaast_config=/app/resources/config.json
+    ports:
+      - "8081:8080"
+      - "4840:4840"
+    depends_on:
+      - mongo
+    networks:
+      - iot-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+      
+networks:
+  iot-network:
+    name: iot-network
+    driver: bridge
+    external: true
+
+volumes:
+  mongo-data:
