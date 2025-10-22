@@ -4,8 +4,8 @@ services:
     image: eclipse-mosquitto:2.0
     container_name: mqtt-broker
     ports:
-      - "1883:1883"
-      - "9001:9001"
+      - "1884:1883"
+      - "9002:9001"
     volumes:
       - ../mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
       - mosquitto-data:/mosquitto/data
@@ -34,7 +34,6 @@ services:
 networks:
   iot-network:
     name: iot-network
-    external: true
 
 volumes:
   mosquitto-data:
